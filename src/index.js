@@ -7,6 +7,8 @@ const app = express();
 //middleware
 app.use(cors());
 app.use(express.json());
+const { requestLogger } = require('./middleware/logger');
+app.use(requestLogger);
 
 // health
 app.get('/health', (req, res) => {
