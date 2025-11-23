@@ -22,11 +22,23 @@ async function listTournaments(req, res, next) {
       });
     }
 
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 20;
+
+    const total = tournaments.length;
+
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    const paginatedItems = tournaments.slice(start, end);
+
     // Return raw filtered list (pagination next commit)
     return res.json({
       segment,
-      total: tournaments.length,
-      items: tournaments
+
+      page,
+      limit,
+      total,
+      items: paginatedItems
     });
 
   } catch (err) {
