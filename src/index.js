@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
+
 const app = express();
 
 //middleware
@@ -11,6 +12,9 @@ app.use(express.json());
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
+const routes = require('./routes');
+app.use('/api', routes);
+
 
 // server
 const { config } = require('./config');
