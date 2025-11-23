@@ -13,7 +13,9 @@ app.get('/health', (req, res) => {
 });
 
 // server
-const PORT = 3000;
+const { config } = require('./config');
+const PORT = config.port;
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
