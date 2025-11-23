@@ -1,4 +1,6 @@
 const authService = require('../services/authService');
+const AuthStore = require('../store/authStore');
+
 
 async function login(req, res, next) {
   try {
@@ -20,4 +22,43 @@ async function login(req, res, next) {
   }
 }
 
-module.exports = { login };
+async function verifyOtp(req, res, next) {
+  try {
+    const { phoneNumber, otp } = req.body;
+
+    if (!phoneNumber || !otp) {
+      return res.status(400).json({ success: false, message: "phoneNumber and otp required" });
+    }
+
+    const data = await authService.thrylVerifyOtp(phoneNumber, otp);
+
+    // Normalize variations of Thryl API response
+    const token =
+      data.token ||
+      (data.data && data.data.token) ||
+      null;
+
+    const userId =
+      data.userId ||
+      (data.data && data.data.userId) ||
+      null;
+
+    // Save in memory
+    AuthStore.set({ token, userId });
+
+    console.log(`[VERIFY OTP] phone=${phoneNumber} time=${new Date().toISOString()} tokenStored=${!!token}`);
+
+    return res.json({
+      success: true,
+      token,
+      userId
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { login, verifyOtp };
+
+
+

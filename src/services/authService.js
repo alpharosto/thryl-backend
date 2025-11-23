@@ -5,4 +5,10 @@ async function thrylLogin(phoneNumber) {
   return response.data;
 }
 
-module.exports = { thrylLogin };
+async function thrylVerifyOtp(phoneNumber, otp) {
+  const response = await axiosClient.post('/auth/verify-otp', { phoneNumber, otp });
+  return response.data;
+}
+
+
+module.exports = { thrylLogin , thrylVerifyOtp };
