@@ -14,6 +14,9 @@ app.get('/health', (req, res) => {
 });
 const routes = require('./routes');
 app.use('/api', routes);
+const { errorHandler } = require('./middleware/errorHandler');
+app.use(errorHandler);
+
 
 
 // server
