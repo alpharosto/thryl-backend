@@ -30,6 +30,6 @@ RUN npm install --omit=dev
 COPY src ./src
 COPY .env.example ./
 
-EXPOSE 3000
+EXPOSE 5000
 
 CMD ["node", "src/index.js"]
