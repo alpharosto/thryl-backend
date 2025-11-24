@@ -1,63 +1,158 @@
 {
   "info": {
-    "name": "Thryl Backend API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_postman_id": "c5a2f9fc-42b1-4a3a-a44e-518c1d4b4231"
+    "_postman_id": "cbcf7e5e-77fb-4216-9d37-aaa1b4f5f2c1",
+    "name": "Thryl Backend Proxy - Complete Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Login",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"phoneNumber\": \"9999999999\"\n}"
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"phoneNumber\": \"9999999999\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "{{base_url}}/api/auth/login",
-          "host": ["{{base_url}}"],
-          "path": ["api", "auth", "login"]
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"phoneNumber\": \"9999999999\",\n    \"otp\": \"1234\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/verify-otp",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "verify-otp"]
+            }
+          },
+          "response": []
         }
-      }
+      ]
     },
     {
-      "name": "Verify OTP",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"phoneNumber\": \"9999999999\",\n  \"otp\": \"1234\"\n}"
+      "name": "Tournaments",
+      "item": [
+        {
+          "name": "Get All Tournaments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/tournaments",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "tournaments"]
+            }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "{{base_url}}/api/auth/verify-otp",
-          "host": ["{{base_url}}"],
-          "path": ["api", "auth", "verify-otp"]
+        {
+          "name": "Get Ongoing Tournaments",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/tournaments?segment=ongoing",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "tournaments"],
+              "query": [{ "key": "segment", "value": "ongoing" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Upcoming Tournaments",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/tournaments?segment=upcoming",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "tournaments"],
+              "query": [{ "key": "segment", "value": "upcoming" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Finished Tournaments",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/tournaments?segment=finished",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "tournaments"],
+              "query": [{ "key": "segment", "value": "finished" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pagination Page 2, Limit 10",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/tournaments?page=2&limit=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "tournaments"],
+              "query": [
+                { "key": "page", "value": "2" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ongoing - Page 1, Limit 5",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/tournaments?segment=ongoing&page=1&limit=5",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "tournaments"],
+              "query": [
+                { "key": "segment", "value": "ongoing" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "5" }
+              ]
+            }
+          },
+          "response": []
         }
-      }
-    },
-    {
-      "name": "Get Tournaments",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/api/tournaments",
-          "host": ["{{base_url}}"],
-          "path": ["api", "tournaments"]
-        }
-      }
+      ]
     }
   ]
 }

@@ -25,6 +25,7 @@ function requireAuth(req, res, next) {
     token: AuthStore.token,
     userId: AuthStore.userId
   };
+  console.log("requireAuth running. Token:", AuthStore.token);
 
   return next();
 }
