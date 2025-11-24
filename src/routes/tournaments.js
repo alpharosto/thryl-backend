@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const tournamentController = require('../controllers/tournamentController');
-
-router.get('/', tournamentController.listTournaments);
+const requireAuth = require('../middleware/requireAuth');
+router.get('/',requireAuth, tournamentController.listTournaments);
 
 module.exports = router;

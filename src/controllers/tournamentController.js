@@ -1,7 +1,7 @@
 const { fetchTournaments } = require('../services/tournamentService');
 const AuthStore = require('../store/authStore');
 
-// Mapping function to normalize raw Thryl data
+
 function mapTournament(raw) {
   if (!raw) return {};
 
@@ -21,27 +21,23 @@ async function listTournaments(req, res, next) {
   try {
     const token = AuthStore.token;
 
-    // Fetch tournaments from Thryl API
+    // Fetch tournaments from Thryl API or mock
     const result = await fetchTournaments(token);
     let tournaments = result.items || result.tournaments || result || [];
 
     if (!Array.isArray(tournaments)) tournaments = [];
 
-    // ---------------------------
-    //   1) Segment filtering
-    // ---------------------------
+  
     const segment = (req.query.segment || "all").toLowerCase();
 
-    if (segment === "ongoing") {
+    if (segment !== "all") {
       tournaments = tournaments.filter(t => {
         const status = (t.status || "").toLowerCase();
-        return status === "ongoing";
+        return status === segment; // exact match: ongoing, upcoming, finished
       });
     }
 
-    // ---------------------------
-    //   2) Pagination
-    // ---------------------------
+   
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 20;
 
@@ -49,9 +45,6 @@ async function listTournaments(req, res, next) {
     const start = (page - 1) * limit;
     const paginated = tournaments.slice(start, start + limit);
 
-    // ---------------------------
-    //   3) Mapping (NEW)
-    // ---------------------------
     const mappedItems = paginated.map(mapTournament);
 
     return res.json({

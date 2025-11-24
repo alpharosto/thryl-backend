@@ -44,14 +44,15 @@ async function verifyOtp(req, res, next) {
       null;
 
     // Save in memory
-    AuthStore.set({ token, userId });
-
+    const expiresIn = data.expiresIn || (60 * 60); // default 1 hour if not provided
+    AuthStore.set({ token, userId, expiresIn });
     console.log(`[VERIFY OTP] phone=${phoneNumber} time=${new Date().toISOString()} tokenStored=${!!token}`);
 
     return res.json({
       success: true,
       token,
-      userId
+      userId,
+      expiresIn
     });
   } catch (err) {
     next(err);
