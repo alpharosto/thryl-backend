@@ -1,228 +1,295 @@
 Thryl Backend Proxy Service
-A lightweight Node.js backend service that acts as a proxy between clients and Thryl APIs. This service handles authentication, token management, tournament data retrieval with filtering and pagination, providing a clean and consistent API interface.
+
+A production-grade Node.js backend service that acts as a proxy between clients and the (mocked) Thryl APIs.
+This backend handles authentication, token management, tournament listing with filtering & pagination, and includes complete DevOps setup with logging, Docker, CI, and health checks.
 
 🚀 Features
-Authentication Proxy - Handles login and OTP verification with Thryl APIs
+Backend Functionality
 
-Token Management - Secure in-memory token storage
+🔐 Authentication Proxy (Login + OTP Verify)
 
-Tournament Management - Retrieve tournaments with server-side filtering and pagination
+🔑 In-memory token storage (as per assignment)
 
-Clean API Design - Consistent response structure and error handling
+🏆 Tournament listing with:
 
-Docker Support - Containerized deployment with health checks
+Filtering (segment=all|ongoing)
 
-Comprehensive Documentation - Postman collection and API specifications
+Pagination (page, limit)
+
+Clean mapped response
+
+⚡ Internal proxy: Client → Backend → Thryl API → Backend → Client
+
+🧱 Centralized error handling
+
+🧩 Clean architecture (controllers/services/routes/middleware)
+
+DevOps
+
+🐳 Dockerized backend service
+
+🏗️ Multi-stage Docker build (production-grade)
+
+🔁 docker-compose with health checks
+
+📜 Structured logging using Pino (JSON logs)
+
+⚙️ GitHub Actions CI pipeline
+
+🌱 Environment variable configuration via .env
 
 🛠️ Tech Stack
-Runtime: Node.js
-
-Framework: Express.js
-
-HTTP Client: Axios
-
-Containerization: Docker + Docker Compose
-
-Environment Management: dotenv
-
-Development: Nodemon
-
+Layer	Technology
+Runtime	Node.js
+Framework	Express.js
+HTTP Client	Axios
+Logging	Pino + Pretty renderer
+Containerization	Docker, Docker Compose
+CI/CD	GitHub Actions
+Development	Nodemon
+Mock API	Custom Express mock server (port 5500)
 📁 Project Structure
-text
 thryl-backend/
 ├── src/
-│   ├── controllers/     # Route controllers
-│   ├── middleware/      # Custom middleware
-│   ├── utils/          # Utility functions
-│   └── app.js          # Main application file
+│   ├── controllers/       # Route handlers
+│   ├── middleware/        # Auth, logger, error handling
+│   ├── routes/            # Route definitions
+│   ├── services/          # External API calls
+│   ├── store/             # In-memory token store
+│   ├── utils/             # Logger, axios client
+│   └── app.js             # Application entry
+├── mock-api/              # Mock Thryl API on port 5500
+├── .github/workflows/ci.yml
 ├── Dockerfile
 ├── docker-compose.yml
-├── package.json
 ├── .env.example
 ├── postman_collection.json
 └── README.md
-🔧 Installation & Setup
-Prerequisites
-Node.js (v14 or higher)
 
-npm or yarn
-
-Docker (optional, for containerized deployment)
-
-Local Development
-Clone and setup the repository
-
-bash
-git clone git@github.com-personal:alpharosto/thryl-backend.git
+🔧 Installation & Local Development
+1. Clone Repository
+git clone git@github.com:alpharosto/thryl-backend.git
 cd thryl-backend
-Install dependencies
 
-bash
+2. Install Dependencies
 npm install
-Configure environment variables
 
-bash
+3. Setup Environment Variables
 cp .env.example .env
-Edit .env file with your configuration:
 
-env
+
+.env values:
+
 PORT=5000
-THRYL_API_BASE_URL=https://api.thryl.app
-NODE_ENV=development
-Start development server
+THRYL_API_BASE_URL=http://localhost:5500
 
-bash
+4. Start Mock Thryl API
+npm run mock
+
+
+Runs at → http://localhost:5500
+
+5. Start Backend
 npm run dev
-The server will start on http://localhost:5000
+
+
+Runs at → http://localhost:5000
 
 🐳 Docker Deployment
-Build and run with Docker Compose
-bash
+Run with docker-compose
 docker-compose up --build
-Check service health
-bash
-curl http://localhost:5000/health
+
+
+Backend is available at:
+
+👉 http://localhost:3000
+
+Healthcheck
+curl http://localhost:3000/health
+
+🏗️ Multi-Stage Dockerfile
+
+Included in repository:
+
+Stage 1: Build (installs deps, prepares environment)
+
+Stage 2: Runtime (production deps only)
+
+Reduces image size significantly
+
+🔁 docker-compose.yml Features
+
+Exposes backend on 3000:3000
+
+Loads .env
+
+Includes healthcheck
+
+Restart policy enabled
+
+📜 Structured Logging
+
+Implemented using Pino, with pretty printing in development.
+
+Examples:
+
+INFO  [LOGIN] phone=9999999999 status=success
+INFO  [VERIFY OTP] tokenStored=true userId=user-001
+INFO  [TOURNAMENTS] segment=ongoing page=1 limit=20
+
+⚙️ GitHub Actions CI
+
+Located at:
+
+.github/workflows/ci.yml
+
+
+CI pipeline includes:
+
+Checkout code
+
+Install dependencies
+
+Linting
+
+Build verification
+
+Docker image build test
+
 📬 API Endpoints
-Health Check
+1. Health Check
 GET /health
 
 Response:
+{ "status": "ok" }
 
-json
-{
-  "status": "OK",
-  "timestamp": "2024-01-15T10:00:00.000Z",
-  "uptime": "2 hours"
-}
-Authentication
+2. Authentication
 Login
 POST /api/auth/login
 
-Request:
 
-json
-{
-  "phoneNumber": "9999999999"
-}
+Body:
+
+{ "phoneNumber": "9999999999" }
+
+
 Response:
 
-json
 {
   "success": true,
-  "message": "OTP sent successfully"
+  "requestId": "REQ-12345"
 }
+
 Verify OTP
 POST /api/auth/verify-otp
 
-Request:
 
-json
+Body:
+
 {
   "phoneNumber": "9999999999",
   "otp": "1234"
 }
+
+
 Response:
 
-json
 {
   "success": true,
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "userId": "user_123456",
-  "message": "Authentication successful"
+  "token": "mock-token-123456",
+  "userId": "user-001",
+  "expiresIn": 3600
 }
-Tournaments
-Get Tournaments
+
+
+✔ Token is stored in-memory
+✔ Required before tournament access
+
+3. Tournaments
 GET /api/tournaments
 
-Query Parameters:
-
-segment (optional): ongoing | all - Filter tournaments by status
-
-page (optional): Number - Pagination page number (default: 1)
-
-limit (optional): Number - Items per page (default: 20)
-
-Headers:
-
-Authorization: Bearer <token> (required)
-
+Query parameters:
+name	values	description
+segment	all / ongoing	filter by status
+page	number	default: 1
+limit	number	default: 20
 Response:
-
-json
 {
-  "success": true,
-  "data": [
+  "segment": "ongoing",
+  "page": 1,
+  "limit": 20,
+  "total": 50,
+  "items": [
     {
-      "id": "tournament_123",
-      "name": "Weekly Championship",
+      "id": "T001",
+      "name": "PUBG Winter Clash",
       "status": "ongoing",
-      "startDate": "2024-01-15T10:00:00Z",
-      "endDate": "2024-01-22T10:00:00Z",
-      "participants": 150,
-      "prizePool": 5000
+      "prizepool": 25000,
+      "participants": 120,
+      "maxparticipants": 500
     }
-  ],
-  "pagination": {
-    "page": 1,
-    "limit": 20,
-    "total": 150,
-    "pages": 8
-  }
+  ]
 }
+
 🧪 Testing with Postman
-Import postman_collection.json from the project root into Postman
 
-Set up Postman environment variables:
+Import postman_collection.json
 
-base_url: http://localhost:5000
+Set env variable:
 
-Test the complete workflow:
+base_url = http://localhost:5000
 
-Login → Send phone number
 
-Verify OTP → Complete authentication
+Run sequence:
 
-Get Tournaments → Use returned token to fetch tournament data
+Login
 
-🔒 Security & Architecture
-Token Storage: In-memory storage (as per assignment requirements)
+Verify OTP
 
-Error Handling: Comprehensive error middleware with consistent responses
+Tournaments
 
-Request Logging: All incoming requests are logged for monitoring
+📝 Assumptions & Notes
+1. Real Thryl APIs are unavailable
 
-Input Validation: Basic validation for required parameters
+A fully functional Mock Thryl API is implemented at port 5500.
 
-CORS: Enabled for cross-origin requests
+2. Token stored in-memory
 
-Rate Limiting: Basic rate limiting implemented
+Per assignment requirements — no database/Redis used.
+
+3. Tournament response normalization
+
+Since real schema is unknown, a consistent normalized mapping layer was created.
+
+4. OTP always succeeds (simulated)
+
+No SMS gateway required.
+
+5. Pagination + filtering implemented server-side
+
+Assignment requires backend-side filtering and paging.
+
+6. DevOps choices
+
+Multi-stage Docker build for optimized production image
+
+CI pipeline assumes Node.js 18 target environment
+
+Healthcheck at /health
+
+7. Logging strategy
+
+Structured JSON logging adopted as production best practice.
 
 🚀 Development Scripts
-bash
-npm run dev      # Start development server with hot reload
-npm start        # Start production server
-npm test         # Run tests (if available)
-📌 Assumptions & Notes
-The actual Thryl API URL is not provided, so https://api.thryl.app is used as a placeholder
-
-Token storage is implemented in-memory for assignment purposes (production would use Redis/database)
-
-Tournament API response structure is normalized since the actual service response format is unknown
-
-Pagination and filtering are implemented server-side for consistency
-
-Error responses follow a standardized format across all endpoints
+npm run dev      # Development server with nodemon
+npm start        # Production server
+npm run mock     # Run mock Thryl API
 
 🤝 Contributing
-Fork the repository
 
-Create a feature branch (git checkout -b feature/amazing-feature)
+Standard PR workflow using branches.
 
-Commit your changes (git commit -m 'Add some amazing feature')
+📄 License
 
-Push to the branch (git push origin feature/amazing-feature)
-
-Open a Pull Request
-
-📝 License
-This project was developed as part of a backend + DevOps assignment.
+This project was created for a backend + DevOps assignment.

@@ -46,6 +46,7 @@ async function listTournaments(req, res, next) {
     const paginated = tournaments.slice(start, start + limit);
 
     const mappedItems = paginated.map(mapTournament);
+    logger.info({ segment, page, limit }, "Fetching tournaments");
 
     return res.json({
       segment,

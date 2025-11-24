@@ -1,10 +1,12 @@
 const authService = require('../services/authService');
 const AuthStore = require('../store/authStore');
+const logger = require('../utils/logger');
 
 
 async function login(req, res, next) {
   try {
     const { phoneNumber } = req.body;
+    logger.info({ phoneNumber }, "Login attempt");
 
     if (!phoneNumber) {
       return res.status(400).json({ success: false, message: "phoneNumber required" });
@@ -25,6 +27,7 @@ async function login(req, res, next) {
 async function verifyOtp(req, res, next) {
   try {
     const { phoneNumber, otp } = req.body;
+    logger.info({ phoneNumber, tokenStored: !!token }, "OTP verified");
 
     if (!phoneNumber || !otp) {
       return res.status(400).json({ success: false, message: "phoneNumber and otp required" });

@@ -20,10 +20,10 @@
               "raw": "{\n    \"phoneNumber\": \"9999999999\"\n}"
             },
             "url": {
-              "raw": "http://localhost:5000/api/auth/login",
+              "raw": "http://localhost:3000/api/auth/login",
               "protocol": "http",
               "host": ["localhost"],
-              "port": "5000",
+              "port": "3000",
               "path": ["api", "auth", "login"]
             }
           },
@@ -41,10 +41,10 @@
               "raw": "{\n    \"phoneNumber\": \"9999999999\",\n    \"otp\": \"1234\"\n}"
             },
             "url": {
-              "raw": "http://localhost:5000/api/auth/verify-otp",
+              "raw": "http://localhost:3000/api/auth/verify-otp",
               "protocol": "http",
               "host": ["localhost"],
-              "port": "5000",
+              "port": "3000",
               "path": ["api", "auth", "verify-otp"]
             }
           },
@@ -61,10 +61,10 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/tournaments",
+              "raw": "http://localhost:3000/api/tournaments",
               "protocol": "http",
               "host": ["localhost"],
-              "port": "5000",
+              "port": "3000",
               "path": ["api", "tournaments"]
             }
           },
@@ -78,7 +78,7 @@
               "raw": "http://localhost:5000/api/tournaments?segment=ongoing",
               "protocol": "http",
               "host": ["localhost"],
-              "port": "5000",
+              "port": "3000",
               "path": ["api", "tournaments"],
               "query": [{ "key": "segment", "value": "ongoing" }]
             }
@@ -90,10 +90,10 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "http://localhost:5000/api/tournaments?segment=upcoming",
+              "raw": "http://localhost:3000/api/tournaments?segment=upcoming",
               "protocol": "http",
               "host": ["localhost"],
-              "port": "5000",
+              "port": "3000",
               "path": ["api", "tournaments"],
               "query": [{ "key": "segment", "value": "upcoming" }]
             }
@@ -105,10 +105,10 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "http://localhost:5000/api/tournaments?segment=finished",
+              "raw": "http://localhost:3000/api/tournaments?segment=finished",
               "protocol": "http",
               "host": ["localhost"],
-              "port": "5000",
+              "port": "3000",
               "path": ["api", "tournaments"],
               "query": [{ "key": "segment", "value": "finished" }]
             }
@@ -120,10 +120,10 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "http://localhost:5000/api/tournaments?page=2&limit=10",
+              "raw": "http://localhost:3000/api/tournaments?page=2&limit=10",
               "protocol": "http",
               "host": ["localhost"],
-              "port": "5000",
+              "port": "3000",
               "path": ["api", "tournaments"],
               "query": [
                 { "key": "page", "value": "2" },
@@ -138,10 +138,10 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "http://localhost:5000/api/tournaments?segment=ongoing&page=1&limit=5",
+              "raw": "http://localhost:3000/api/tournaments?segment=ongoing&page=1&limit=5",
               "protocol": "http",
               "host": ["localhost"],
-              "port": "5000",
+              "port": "3000",
               "path": ["api", "tournaments"],
               "query": [
                 { "key": "segment", "value": "ongoing" },
