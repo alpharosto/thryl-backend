@@ -27,7 +27,7 @@ async function login(req, res, next) {
 async function verifyOtp(req, res, next) {
   try {
     const { phoneNumber, otp } = req.body;
-    logger.info({ phoneNumber, tokenStored: !!token }, "OTP verified");
+    // logger.info({ phoneNumber, tokenStored: !!token }, "OTP verified");
 
     if (!phoneNumber || !otp) {
       return res.status(400).json({ success: false, message: "phoneNumber and otp required" });
@@ -49,6 +49,7 @@ async function verifyOtp(req, res, next) {
     // Save in memory
     const expiresIn = data.expiresIn || (60 * 60); // default 1 hour if not provided
     AuthStore.set({ token, userId, expiresIn });
+     logger.info({ phoneNumber, tokenStored: !!token, userId }, "OTP verified");
     console.log(`[VERIFY OTP] phone=${phoneNumber} time=${new Date().toISOString()} tokenStored=${!!token}`);
 
     return res.json({

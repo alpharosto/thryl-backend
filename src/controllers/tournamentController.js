@@ -1,5 +1,7 @@
 const { fetchTournaments } = require('../services/tournamentService');
 const AuthStore = require('../store/authStore');
+const logger = require('../utils/logger');
+
 
 
 function mapTournament(raw) {
